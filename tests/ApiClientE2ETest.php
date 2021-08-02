@@ -28,6 +28,9 @@ class ApiClientE2ETest extends AbstractTestCase
         return $this->makeApiClient($apiVersion)->setApiKey($_ENV['API_KEY']);
     }
 
+    /**
+     * Test the setApiKey and getApiKey methods.
+     */
     public function testSetGetApiKey()
     {
         $apiClient = $this->makeApiClient();
@@ -39,18 +42,8 @@ class ApiClientE2ETest extends AbstractTestCase
         $this->assertNull($apiClient->getApiKey());
     }
 
-    public function testSetApiRootUrl()
-    {
-        $apiClient = $this->makeApiClient(ApiVersion::NONE);
-        $apiClient->setApiRootUrl('https://downloads.dtapps.co.uk');
-
-        $response = $apiClient->get('test.json');
-        $result = $apiClient->parseResponse($response);
-        $this->assertSame(['hello' => 'world'], $result);
-    }
-
     /**
-     * Make a request to the paymentmethods endpoint, which does not require authentication, to check we are
+     * Make a request to the V2 paymentmethods endpoint, which does not require authentication, to check we are
      * getting a sensible result.
      */
     public function testGetUnauthenticatedV2Endpoint()
@@ -74,6 +67,9 @@ class ApiClientE2ETest extends AbstractTestCase
         $this->assertSame('Cash', $cashPaymentMethods[0]['name']);
     }
 
+    /**
+     * Test a simple GET request to a V1 endpoint.
+     */
     public function testGetUnauthenticatedV1Endpoint()
     {
         $apiClient = $this->makeApiClient(ApiVersion::V1);
@@ -95,6 +91,9 @@ class ApiClientE2ETest extends AbstractTestCase
         $this->assertSame('Cash', $cashPaymentMethods[0]['name']);
     }
 
+    /**
+     * Test that a request to an endpoint that does not exist throws a suitable exception.
+     */
     public function testGetNonexistentEndpointThrowsException()
     {
         $this->expectException(ClientException::class);
@@ -104,6 +103,9 @@ class ApiClientE2ETest extends AbstractTestCase
         $apiClient->get('dogbirthdays');
     }
 
+    /**
+     * Test that an exception is thrown when a non-JSON response is sent to parseResponse.
+     */
     public function testNonJsonEndpointThrowsException()
     {
         $this->expectException(MalformedApiResponseException::class);
@@ -116,6 +118,9 @@ class ApiClientE2ETest extends AbstractTestCase
         $apiClient->parseResponse($response);
     }
 
+    /**
+     * Test that the raw Response is accessible in case of an exception in parseResponse.
+     */
     public function testNonJsonEndpointReturnsResponseInException()
     {
         $response = null;
@@ -134,6 +139,9 @@ class ApiClientE2ETest extends AbstractTestCase
         $this->assertSame("DigiTickets API - You've arrived!<br />\n", (string) $response->getBody());
     }
 
+    /**
+     * Test endpoints that require an apiKey throw a suitable exception if non is supplied.
+     */
     public function testAuthenticatedEndpointThrowsExceptionWithoutApiKey()
     {
         $this->expectException(ClientException::class);
@@ -143,6 +151,9 @@ class ApiClientE2ETest extends AbstractTestCase
         $apiClient->get('branches');
     }
 
+    /**
+     * Test a GET request to an endpoint that requires and apiKey.
+     */
     public function testAuthenticatedEndpointReturnsResponse()
     {
         $apiClient = $this->makeAuthenticatedApiClient();
@@ -154,6 +165,9 @@ class ApiClientE2ETest extends AbstractTestCase
         $this->assertNotEmpty($branches[0]['name']);
     }
 
+    /**
+     * Test a POST request.
+     */
     public function testPost()
     {
         $apiClient = $this->makeAuthenticatedApiClient();
@@ -172,6 +186,9 @@ class ApiClientE2ETest extends AbstractTestCase
         $this->assertSame('abcdefg', $result['thirdPartyRef']);
     }
 
+    /**
+     * Test a DELETE request.
+     */
     public function testDelete()
     {
         $apiClient = $this->makeAuthenticatedApiClient();
@@ -184,6 +201,9 @@ class ApiClientE2ETest extends AbstractTestCase
         $this->assertTrue($result['success']);
     }
 
+    /**
+     * Test a PUT request.
+     */
     public function testPut()
     {
         $apiClient = $this->makeAuthenticatedApiClient();
@@ -202,6 +222,9 @@ class ApiClientE2ETest extends AbstractTestCase
         $this->assertTrue($result['success']);
     }
 
+    /**
+     * Test a PATCH request.
+     */
     public function testPatch()
     {
         $apiClient = $this->makeAuthenticatedApiClient();
@@ -220,6 +243,28 @@ class ApiClientE2ETest extends AbstractTestCase
         $this->assertSame('abcdefg', $result['machineIdentifier']);
     }
 
+    /**
+     * Test setting an alternate API url.
+     */
+    public function testAlternateApiUrl()
+    {
+        $apiClient = new ApiClient(
+            ApiVersion::NONE,
+            'https://downloads.dtapps.co.uk'
+        );
+
+        $response = $apiClient->get('test.json');
+        $result = $apiClient->parseResponse($response);
+        $this->assertSame(['hello' => 'world'], $result);
+    }
+
+    /**
+     * Get a device from the /devices endpoint that can be used in some tests.
+     *
+     * @param ApiClient $apiClient
+     *
+     * @return array
+     */
     private function getTestDevice(ApiClient $apiClient): array
     {
         // Get available devices.

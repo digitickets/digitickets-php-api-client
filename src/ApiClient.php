@@ -61,13 +61,6 @@ class ApiClient
         return $this;
     }
 
-    public function setApiRootUrl(string $apiRootUrl): self
-    {
-        $this->apiRootUrl = $apiRootUrl;
-
-        return $this;
-    }
-
     /**
      * Make a request to the API and returns the response. The returned value of a PSR ResponseInterface, so you
      * can access the status and headers of the response too.
