@@ -1,6 +1,7 @@
 # DigiTickets PHP API Client
 
-Provides access to the DigiTickets API.
+Provides access to the DigiTickets API. At present this is a fairly basic HTTP client. Eventually this will be fleshed
+out and have methods for all the endpoints available in the API along with the possible parameters.
 
 ## Usage
 ```
