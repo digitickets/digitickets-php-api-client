@@ -137,7 +137,7 @@ class ApiClientE2ETest extends AbstractTestCase
     public function testAuthenticatedEndpointThrowsExceptionWithoutApiKey()
     {
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('You must supply a valid apiKey key with each request.');
+        $this->expectExceptionMessage('You must supply a valid');
 
         $apiClient = $this->makeApiClient();
         $apiClient->get('branches');

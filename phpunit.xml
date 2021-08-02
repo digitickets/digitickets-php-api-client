@@ -1,0 +1,8 @@
+<phpunit convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false">
+    <php>
+        <ini name="memory_limit" value="-1"/>
+    </php>
+</phpunit>
