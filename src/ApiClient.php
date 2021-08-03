@@ -64,11 +64,11 @@ class ApiClient
     /**
      * Make a request to the API and returns the response. The returned value of a PSR ResponseInterface, so you
      * can access the status and headers of the response too.
-     * To access the actual data pass that response to $this->parseResponse.
+     * To access the actual data pass that response to $this->parseResponse().
      *
+     * @param string $method
      * @param string $endpoint
      * @param array $requestData
-     * @param string $method
      * @param array $headers
      *
      * @return ResponseInterface
