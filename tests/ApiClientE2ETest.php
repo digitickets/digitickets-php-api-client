@@ -140,7 +140,7 @@ class ApiClientE2ETest extends AbstractTestCase
     }
 
     /**
-     * Test endpoints that require an apiKey throw a suitable exception if non is supplied.
+     * Test endpoints that require an apiKey throw a suitable exception if one is not supplied.
      */
     public function testAuthenticatedEndpointThrowsExceptionWithoutApiKey()
     {
@@ -152,7 +152,7 @@ class ApiClientE2ETest extends AbstractTestCase
     }
 
     /**
-     * Test a GET request to an endpoint that requires and apiKey.
+     * Test a GET request to an endpoint that requires an apiKey.
      */
     public function testAuthenticatedEndpointReturnsResponse()
     {

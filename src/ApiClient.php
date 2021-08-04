@@ -9,13 +9,6 @@ use GuzzleHttp\Client;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * Provides access to the DigiTickets API.
- * The ApiClient namespace is used to differentiate from providing the API and accessing the API.
- *
- * IMPORTANT: This is stateful (it contains an apiKey property). Do not get this from the DI container, or if you do
- * ensure you use container->make() not container->get().
- */
 class ApiClient
 {
     const DEFAULT_API_URL = 'https://api.digitickets.co.uk/';
@@ -62,7 +55,7 @@ class ApiClient
     }
 
     /**
-     * Make a request to the API and returns the response. The returned value of a PSR ResponseInterface, so you
+     * Makes a request to the API and returns the response. The returned value is a PSR ResponseInterface, so that you
      * can access the status and headers of the response too.
      * To access the actual data pass that response to $this->parseResponse().
      *
@@ -93,8 +86,9 @@ class ApiClient
                 $requestData
             );
             $body = null;
-            // } elseif (!empty($headers['content-type']) && $headers['content-type'] === 'application/json') {
-            //     $body = json_encode($requestData);
+        // For future use with endpoints that require a JSON body.
+        // } elseif (!empty($headers['content-type']) && $headers['content-type'] === 'application/json') {
+        //     $body = json_encode($requestData);
         } else {
             $headers['content-type'] = 'application/x-www-form-urlencoded';
             $body = http_build_query($requestData);
@@ -138,7 +132,7 @@ class ApiClient
     }
 
     /**
-     * JSON-decode the response body and return it as an array.
+     * Decode the JSON in a response body and return it as an array.
      *
      * @param ResponseInterface $response
      *
