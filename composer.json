@@ -1,6 +1,7 @@
 {
     "name": "digitickets/digitickets-php-api-client",
     "description": "Provides access to the DigiTickets API.",
+    "license": "MIT",
     "type": "library",
     "authors": [
         {
