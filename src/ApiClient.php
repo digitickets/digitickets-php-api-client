@@ -170,7 +170,7 @@ class ApiClient
             // Re-throwing the same exception but containing the response so the problem can be debugged.
             throw new MalformedApiResponseException(
                 $response,
-                $e->getMessage(),
+                rtrim($e->getMessage(), '.').". Response body:\n".$response->getBody(),
                 $e->getCode(),
                 $e
             );
