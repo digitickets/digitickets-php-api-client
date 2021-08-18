@@ -6,6 +6,7 @@ use DigiTicketsApiClient\Consts\ApiVersion;
 use DigiTicketsApiClient\Consts\Request;
 use DigiTicketsApiClient\Exceptions\MalformedApiResponseException;
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -65,7 +66,6 @@ class ApiClient
      * @param array $headers
      *
      * @return ResponseInterface
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function request(
         string $method,
@@ -103,7 +103,13 @@ class ApiClient
             $body
         );
 
-        return $this->guzzleClient->send($request);
+        return $this->guzzleClient->send(
+            $request,
+            [
+                // Don't throw exceptions for "bad" responses. Return them as a response object.
+                RequestOptions::HTTP_ERRORS => false,
+            ]
+        );
     }
 
     public function get(string $endpoint, array $requestData = [], array $headers = []): ResponseInterface

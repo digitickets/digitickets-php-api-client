@@ -94,13 +94,13 @@ class ApiClientE2ETest extends AbstractTestCase
     /**
      * Test that a request to an endpoint that does not exist throws a suitable exception.
      */
-    public function testGetNonexistentEndpointThrowsException()
+    public function testGetNonexistentEndpointReturns405Response()
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionMessage("resulted in a `405 Method Not Allowed` response");
-
         $apiClient = $this->makeApiClient();
-        $apiClient->get('dogbirthdays');
+        $response = $apiClient->get('dogbirthdays');
+
+        $this->assertSame(405, $response->getStatusCode());
+        $this->assertSame('Method Not Allowed', $response->getReasonPhrase());
     }
 
     /**
@@ -144,11 +144,11 @@ class ApiClientE2ETest extends AbstractTestCase
      */
     public function testAuthenticatedEndpointThrowsExceptionWithoutApiKey()
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('You must supply a valid');
-
         $apiClient = $this->makeApiClient();
-        $apiClient->get('branches');
+        $response = $apiClient->get('branches');
+
+        $this->assertSame(401, $response->getStatusCode());
+        $this->assertSame('Unauthorized', $response->getReasonPhrase());
     }
 
     /**
