@@ -165,6 +165,21 @@ class ApiClientE2ETest extends AbstractTestCase
         $this->assertNotEmpty($branches[0]['name']);
     }
 
+    public function testGetWithQueryParameters()
+    {
+        $apiClient = $this->makeAuthenticatedApiClient();
+
+        $response = $apiClient->get(
+            'paymentmethods',
+            [
+                'orderBy' => 'ref'
+            ]
+        );
+        $result = $apiClient->parseResponse($response);
+        // Payment methods should have been sorted alphabetically by ref.
+        $this->assertSame('bacs', $result[0]['ref']);
+    }
+
     /**
      * Test a POST request.
      */

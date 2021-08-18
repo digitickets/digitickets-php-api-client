@@ -62,39 +62,37 @@ class ApiClient
      *
      * @param string $method
      * @param string $endpoint
-     * @param array $requestData
+     * @param array $bodyParameters Keys/values to be sent as part of the request body (e.g. for POST requests).
+     *     Does nothing for GET requests.
+     * @param array $queryParameters Keys/values to be appended to the query string in the URL.
      * @param array $headers
      *
      * @return ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function request(
         string $method,
         string $endpoint,
-        array $requestData = [],
+        array $bodyParameters = [],
+        array $queryParameters = [],
         array $headers = []
     ): ResponseInterface {
+        // Allow leading or no leading slash in the provided endpoint.
         $url = rtrim($this->apiRootUrl, '/').'/'.ltrim($endpoint, '/');
 
-        $queryStringData = [];
-        if (!empty($this->getApiKey())) {
-            $queryStringData['apiKey'] = $this->getApiKey();
+        // Add the apiKey to the request if one has not been provided already.
+        if (!empty($this->getApiKey()) && !array_key_exists('apiKey', $queryParameters)) {
+            $queryParameters['apiKey'] = $this->getApiKey();
         }
 
         if ($method === Request::METHOD_GET) {
-            $queryStringData = array_merge(
-                $queryStringData,
-                $requestData
-            );
             $body = null;
-        // For future use with endpoints that require a JSON body.
-        // } elseif (!empty($headers['content-type']) && $headers['content-type'] === 'application/json') {
-        //     $body = json_encode($requestData);
         } else {
             $headers['content-type'] = 'application/x-www-form-urlencoded';
-            $body = http_build_query($requestData);
+            $body = http_build_query($bodyParameters);
         }
 
-        $url .= (strpos($url, '?') !== false ? '&' : '?').http_build_query($queryStringData);
+        $url .= (strpos($url, '?') !== false ? '&' : '?').http_build_query($queryParameters);
 
         $request = new \GuzzleHttp\Psr7\Request(
             $method,
@@ -112,29 +110,48 @@ class ApiClient
         );
     }
 
-    public function get(string $endpoint, array $requestData = [], array $headers = []): ResponseInterface
-    {
-        return $this->request(Request::METHOD_GET, $endpoint, $requestData, $headers);
+    public function get(
+        string $endpoint,
+        array $queryParameters = [],
+        array $headers = []
+    ): ResponseInterface {
+        return $this->request(Request::METHOD_GET, $endpoint, [], $queryParameters, $headers);
     }
 
-    public function post(string $endpoint, array $requestData = [], array $headers = []): ResponseInterface
-    {
-        return $this->request(Request::METHOD_POST, $endpoint, $requestData, $headers);
+    public function post(
+        string $endpoint,
+        array $bodyParameters = [],
+        array $queryParameters = [],
+        array $headers = []
+    ): ResponseInterface {
+        return $this->request(Request::METHOD_POST, $endpoint, $bodyParameters, $queryParameters, $headers);
     }
 
-    public function delete(string $endpoint, array $requestData = [], array $headers = []): ResponseInterface
-    {
-        return $this->request(Request::METHOD_DELETE, $endpoint, $requestData, $headers);
+    public function put(
+        string $endpoint,
+        array $bodyParameters = [],
+        array $queryParameters = [],
+        array $headers = []
+    ): ResponseInterface {
+        return $this->request(Request::METHOD_PUT, $endpoint, $bodyParameters, $queryParameters, $headers);
     }
 
-    public function put(string $endpoint, array $requestData = [], array $headers = []): ResponseInterface
-    {
-        return $this->request(Request::METHOD_PUT, $endpoint, $requestData, $headers);
+    public function patch(
+        string $endpoint,
+        array $bodyParameters = [],
+        array $queryParameters = [],
+        array $headers = []
+    ): ResponseInterface {
+        return $this->request(Request::METHOD_PATCH, $endpoint, $bodyParameters, $queryParameters, $headers);
     }
 
-    public function patch(string $endpoint, array $requestData = [], array $headers = []): ResponseInterface
-    {
-        return $this->request(Request::METHOD_PATCH, $endpoint, $requestData, $headers);
+    public function delete(
+        string $endpoint,
+        array $bodyParameters = [],
+        array $queryParameters = [],
+        array $headers = []
+    ): ResponseInterface {
+        return $this->request(Request::METHOD_DELETE, $endpoint, $bodyParameters, $queryParameters, $headers);
     }
 
     /**
