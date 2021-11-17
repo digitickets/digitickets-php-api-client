@@ -1,0 +1,33 @@
+name: pipeline
+on:
+    push:
+        branches:
+            - master
+jobs:
+    test-php7:
+        name: Run tests on PHP 7.0.33
+        runs-on: ubuntu-20.04
+        container: antriver/php:7.0.33
+        steps:
+            -   name: Check out repository code
+                uses: actions/checkout@v2
+            -   name: Composer install
+                run: composer install --ignore-platform-reqs
+            -   name: Create .env
+                run: cp .env.example .env
+            -   name: Run tests
+                run: composer test
+
+    test-php8:
+        name: Run tests on PHP 8.0.12
+        runs-on: ubuntu-20.04
+        container: antriver/php:8.0.12
+        steps:
+            -   name: Check out repository code
+                uses: actions/checkout@v2
+            -   name: Composer install
+                run: composer install --ignore-platform-reqs
+            -   name: Create .env
+                run: cp .env.example .env
+            -   name: Run tests
+                run: composer test
