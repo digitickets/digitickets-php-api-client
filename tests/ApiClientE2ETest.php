@@ -5,7 +5,6 @@ namespace DigiTicketsApiClientTests;
 use DigiTicketsApiClient\ApiClient;
 use DigiTicketsApiClient\Consts\ApiVersion;
 use DigiTicketsApiClient\Exceptions\MalformedApiResponseException;
-use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
 
 class ApiClientE2ETest extends AbstractTestCase
@@ -290,5 +289,14 @@ class ApiClientE2ETest extends AbstractTestCase
         }
 
         return $devices[0];
+    }
+
+    public function testHandlingOfTrailingSlashInCustomApiUrl()
+    {
+        $apiClient = new ApiClient(ApiVersion::V2, 'https://api.digitickets.london');
+        $this->assertSame('https://api.digitickets.london/v2/', $apiClient->getApiRootUrl());
+
+        $apiClient = new ApiClient(ApiVersion::V2, 'https://api.digitickets.london/');
+        $this->assertSame('https://api.digitickets.london/v2/', $apiClient->getApiRootUrl());
     }
 }

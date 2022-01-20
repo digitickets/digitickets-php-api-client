@@ -14,7 +14,9 @@ class ApiClient extends \GenericApiClient\ApiClient
         string $apiVersion = ApiVersion::V2,
         string $apiUrl = self::DEFAULT_API_URL
     ) {
-        parent::__construct($apiUrl.($apiVersion ? $apiVersion.'/' : ''));
+        parent::__construct(
+            rtrim($apiUrl, '/').'/'.($apiVersion ? $apiVersion.'/' : '')
+        );
     }
 
     /**
