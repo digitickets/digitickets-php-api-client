@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55f728588674e4e0247ef98cf40f0e94",
+    "content-hash": "c4de2e64d85f03745dbfc70f5b0ce73f",
     "packages": [
         {
             "name": "digitickets/generic-api-client",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/digitickets/generic-api-client.git",
-                "reference": "af7e0a2282e355f2b19cc86773869216e8eb6f2d"
+                "reference": "d3446f49c813061b12d05bdb1d6d8fd042827f80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/digitickets/generic-api-client/zipball/af7e0a2282e355f2b19cc86773869216e8eb6f2d",
-                "reference": "af7e0a2282e355f2b19cc86773869216e8eb6f2d",
+                "url": "https://api.github.com/repos/digitickets/generic-api-client/zipball/d3446f49c813061b12d05bdb1d6d8fd042827f80",
+                "reference": "d3446f49c813061b12d05bdb1d6d8fd042827f80",
                 "shasum": ""
             },
             "require": {
@@ -47,9 +47,9 @@
             "description": "Interface for making request to an API.",
             "support": {
                 "issues": "https://github.com/digitickets/generic-api-client/issues",
-                "source": "https://github.com/digitickets/generic-api-client/tree/1.0.3"
+                "source": "https://github.com/digitickets/generic-api-client/tree/1.0.4"
             },
-            "time": "2022-01-21T09:49:32+00:00"
+            "time": "2022-01-24T15:25:22+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
